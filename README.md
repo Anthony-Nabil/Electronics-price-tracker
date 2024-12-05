@@ -15,16 +15,21 @@
 
 ## Usage
 
-1. Run the scraper:
+1. To run the scrapers independently:
     ```sh
-    python src/scrapers/amazon-scraper.py
+    python src/scrapers/<scraper_name>.py
     ```
 
-2. The scraped data will be stored in a SQLite database located at `../db/amazon.db`.
+    For example:
+    ```sh
+    python src/scrapers/amazon-scraper.py
+   ```
+
+2. The scraped data will be stored in a SQLite database located at `../db/` directory.
 
 ## Project Structure
 
-- `src/amazon-scraper.py`: The main script for scraping Amazon.
+- `src/scrapers/*`: Contains the scraper scripts.
 - `headers.json`: Configuration file for request headers.
 - `../db/`: Directory where the SQLite database will be stored.
 - `../images/`: Directory where product images will be saved.
