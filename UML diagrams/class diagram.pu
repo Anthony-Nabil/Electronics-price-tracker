@@ -1,0 +1,129 @@
+@startuml
+title hardware price dynamics monitoring system class diagram   
+' --- Styling ---
+skinparam {
+  monochrome true
+  class {
+    BackgroundColor White
+    BorderColor Black
+    FontColor Black
+    ArrowColor Black
+  }
+}
+
+' --- Entities ---
+class User {
+  -userID : int
+  -username : string
+  -searchHistory : List<string>
+  -wishlist : List<Product>
+  -email: String
+  +viewProduct(product: Product)
+  +addToWishlist(product: Product)
+  +compareProducts(products: List<Product>)
+  +searchProducts(query: string)
+  +setPriceAlert(product: Product, thresholdPrice: double)
+}
+
+class Product {
+  -productID : int
+  +name : string
+  +description : string
+  +price : double
+  +imagePath : string
+  +productUrl : string
+  +sourceWebsite : string
+  +category : string
+  +specifications : List<String>
+}
+
+class SearchResult {
+  +query : string
+  +products : List<Product>
+  +timestamp : DateTime
+}
+
+' --- Components ---
+class WebScraper {
+    -websiteUrls : List<Website>
+    +getProductName(website: Website) : string
+    +getProductPrice(website: Website) : double
+    +getProductDescription(website: Website) : string
+    +getProductImage(website: Website) : string
+    +getProductUrl(website: Website) : string
+    +getProductSpecifications(website: Website) : List<String>
+}
+
+class Website {
+  +websiteName: String
+  +websiteURL: String
+  +supportedCategories: List<String>
+}
+
+class ProductDatabase {
+  +storeProduct(product: Product)
+  +getProductById(productID: int) : Product
+  +getProductsByCategory(category: string) : List<Product>
+  +searchProducts(query: string) : List<Product>
+  +updateProduct(product: Product)
+}
+
+class SearchEngine {
+  +indexProduct(product: Product)
+  +searchProducts(query: string) : SearchResult
+}
+
+class ProductComparison {
+  +compare(product1: Product, product2: Product) : ComparisonResult
+  -highlightDifferences(comparisonResult: ComparisonResult) : string
+}
+
+class ComparisonResult {
+  +product1: Product
+  +product2: Product
+  -differences: List<String>
+}
+
+' --- Price Monitoring Components ---
+class PriceAlert {
+  -user : User
+  -product : Product
+  -thresholdPrice : double
+  +isTriggered() : boolean
+}
+
+class PriceMonitor {
+  -priceAlerts: List<PriceAlert>
+  +addPriceAlert(user: User, product: Product, thresholdPrice: double)
+  +removePriceAlert(user: User, product: Product)
+  +checkPriceDrops()
+  +notifyUser(user: User, product: Product, newPrice: double)
+}
+
+' --- Relationships ---
+User "1" -- "0..*" SearchResult : performs >
+User "1" -- "0..*" Product : wishlist >
+SearchResult "1" -- "0..*" Product : contains >
+WebScraper "1" -- "0..*" Website : scrapes >
+WebScraper -- Product
+ProductDatabase "1" -- "0..*" Product : stores >
+SearchEngine "1" -- "0..*" Product : indexes >
+ProductComparison "1" -- "0..*" ComparisonResult : generates >
+ProductComparison -- Product
+User "1" -- "0..*" PriceAlert: creates >
+PriceAlert "0..*" -- "1" Product: monitors >
+PriceMonitor "1" -- "0..*" PriceAlert: manages >
+PriceMonitor "1" -- "1" ProductDatabase: checks >
+
+' --- Layout ---
+left to right direction
+WebScraper -[hidden] ProductDatabase
+PriceMonitor -[hidden] SearchEngine
+
+package "made by" {
+      ' Use notes to represent team members
+  note as N1
+
+  end note
+}
+@enduml
