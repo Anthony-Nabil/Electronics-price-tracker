@@ -1,0 +1,28 @@
+@startuml
+skinparam sequenceParticipantSpacing 10
+hide footbox
+
+actor User
+
+User -> Frontend: Request product comparison
+Frontend -> Backend: Send GET request with product IDs
+Backend -> Database: Query product details
+Database --> Backend: Return product details
+Backend -> LLMModule: Generate comparison details
+LLMModule --> Backend: Return comparison output
+Backend --> Frontend: Display comparison results to User
+
+User -> Frontend: Set a price alert for a product
+Frontend -> Backend: Send price alert details
+Backend -> Database: Store price alert conditions
+ScraperService -> Database: Update product prices continuously
+Database -> NotificationService: Trigger notification if threshold is met
+NotificationService -> User: Send email notification
+
+User -> Frontend: Ask for best time to buy a product
+Frontend -> Backend: Forward request
+Backend -> PricePredictionModel: Analyze price history
+PricePredictionModel --> Backend: Return prediction data
+Backend --> Frontend: Display prediction results to User
+
+@enduml
