@@ -4,3 +4,6 @@
 
 # activity diagram
 ![activity diagram](./activity%20diagram.png)
+
+# sequence diagram
+![sequence diagram](./sequence_diagram.png)
