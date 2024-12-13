@@ -1,0 +1,43 @@
+@startuml
+skinparam ActivityBorderThickness 2
+skinparam Padding 5
+skinparam ActivityStartEndPadding 50
+
+|Start|
+start
+fork
+  |Data Scraper|
+  :Identify e-commerce websites to scrape;
+  :Identify categories/products to scrape;
+  repeat
+    :Select website;
+    :Select category/product;
+    :Navigate to product page;
+    :Extract product data (name, price, availability);
+    :Store data in database;
+  repeat while (More websites/categories/products to scrape?) is (yes)
+  ->no;
+fork again
+  |Price Analyzer|
+  :Retrieve historical price data;
+  :Calculate price trends (average, min, max);
+  :Detect price drops/deals;
+  if (Price drop below threshold or deal detected?) then (yes)
+    |Notification Manager|
+    :Prepare notification message;
+    :Identify users interested in category/product;
+    :Send notification to interested users (email, etc.);
+  else (no)
+  endif
+fork again
+  |Scheduler|
+  :Wait for scheduled interval;
+end fork
+:Repeat scraping and analysis;
+
+|User|
+:Receive notifications (optional);
+:Browse product catalog and price history;
+:Make purchase decision;
+stop
+@enduml
