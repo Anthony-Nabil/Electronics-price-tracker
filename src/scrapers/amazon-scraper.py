@@ -39,7 +39,6 @@ categories = [
 
 product_list = []
 
-
 def sanitize_filename(filename):
     sanitized = re.sub(r'[\\/*?:"<>|]', "", filename)
     return sanitized[:MAX_FILE_LENGTH]
