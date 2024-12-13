@@ -15,9 +15,6 @@ logging.basicConfig(
     level=logging.INFO,
 )
 
-# detect number of workers
-
-
 def get_num_workers():
     try:
         return os.cpu_count()
